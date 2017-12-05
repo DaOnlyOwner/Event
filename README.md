@@ -9,6 +9,9 @@ doo::DelegateID id1 = event.Subscribe( FROM_FUNC(void(), say_something ));
 doo::DelegateID id2 = event.Subscribe( FROM_FUNC(void(), say_something_else ));
 doo::DelegateID id3 = event.Subscribe( FROM_METHOD(void(),something,ss)); // First the function type, then the function itself, then the object that the function belongs to.
 doo::DelegateID id4 = event.Subscribe( FROM_FUNCTOR(void(), [](){std::cout << "Hello from Lambda" << std::endl; } ) );
+
+doo::Event<int> event2;
+event2.Subscribe(FROM_FUNC(void(int), print_num));
 ```
 
 Unsubscribing:

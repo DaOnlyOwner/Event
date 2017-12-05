@@ -34,6 +34,10 @@ void say_something_else()
     std::cout << "Hello2 From say_something_else" << std::endl;
 }
 
+void print_num(int num)
+{
+    std::cout << num;
+}
 
 int main()
 {
@@ -52,10 +56,10 @@ int main()
     event.Unsubscribe(id1);
 
     std::cout << std::endl;
-
     event();
 
     std::cout << "Test of EventGuard; Remove id2" << std::endl << std::endl;
+
 
     // If this guard gets out of scope the the delegate will automatically be removed from the Event. 
     // Example: Make this a member. When the object is destroyed the EventGuard will automatically care for the unsubscription of the delegate.
@@ -66,6 +70,10 @@ int main()
 
     event();
 
+    // Example of making an event that receives parameters
+    doo::Event<int> event2;
+    event2.Subscribe(FROM_FUNC(void(int), print_num));
+    event2(2);
 
     return 0;
 }
