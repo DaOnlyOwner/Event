@@ -3,5 +3,5 @@ project(Event)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp Event.h Delegate.h)
+set(SOURCE_FILES main.cpp)
 add_executable(Event ${SOURCE_FILES})

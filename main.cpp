@@ -1,5 +1,6 @@
 #include <iostream>
-#include "Event.h"
+#include "Event.hpp"
+
 
 int hallo()
 {
@@ -25,43 +26,46 @@ struct something_sayer
 
 void say_something()
 {
-    std::cout << "Hello1" << std::endl;
+    std::cout << "Hello1 from say_something" << std::endl;
 }
 
 void say_something_else()
 {
-    std::cout << "Hello2" << std::endl;
+    std::cout << "Hello2 From say_something_else" << std::endl;
 }
 
 
 int main()
 {
 
-    /*test test1;
-    int to_capture = 2;
-
-    auto func_delegate = FROM_FUNC(int() , hallo);
-    auto method_delegate = FROM_METHOD(int(), test, hallo2, test1);
-    doo::Delegate<void()> capturing_lambda =  [to_capture](){std::cout << "From Capturing Lambda: " << to_capture << std::endl; }; // All classes that overload operator();
-
-    func_delegate();
-    method_delegate();
-    capturing_lambda();*/
-
     something_sayer ss;
 
     doo::Event<> event;
     doo::DelegateID id1 = event.Subscribe( FROM_FUNC(void(), say_something ));
     doo::DelegateID id2 = event.Subscribe( FROM_FUNC(void(), say_something_else ));
-    doo::DelegateID id3 = event.Subscribe( FROM_METHOD(void(),something_sayer,something,ss));
+    doo::DelegateID id3 = event.Subscribe( FROM_METHOD(void(),something,ss));
     doo::DelegateID id4 = event.Subscribe( FROM_FUNCTOR(void(), [](){std::cout << "Hello from Lambda" << std::endl; } ) );
 
     std::cout << std::endl;
     event();
-
+    
     event.Unsubscribe(id1);
 
     std::cout << std::endl;
 
     event();
+
+    std::cout << "Test of EventGuard; Remove id2" << std::endl << std::endl;
+
+    // If this guard gets out of scope the the delegate will automatically be removed from the Event. 
+    // Example: Make this a member. When the object is destroyed the EventGuard will automatically care for the unsubscription of the delegate.
+    // If you don't unsubscribe from the associated event then there will be nullptr exceptions etc.
+    {
+        doo::EventGuard<> guard = event.CreateGuard(id2); 
+    }
+
+    event();
+
+
+    return 0;
 }
